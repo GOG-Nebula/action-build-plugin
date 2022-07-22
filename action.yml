@@ -1,0 +1,55 @@
+name: 'Build Plugin'
+description: 'Build GOG Galaxy integration on current OS'
+
+inputs:
+  src:
+    description: 'Location of directory containing manifest.json and essential plugin files'
+    required: true
+    default: 'src'
+  requirements:
+    description: 'Location of Python requirements file'
+    required: true
+    default: 'requirements/app.txt'
+  output-zip-name:
+    description: 'Name of created zip that contains build plugin'
+    required: true
+    default: 'build.zip'
+  third-party-target:
+    description: 'Target directory where pip packages are dumped; relative to resulted build'
+    required: false
+    default: '.'
+  python-arch:
+    description: 'Python binary to be used: x64 for Mac or x86 for Windows'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.7.3'
+        architecture: ${{ matrix.arch }}
+    - run: pip install fog.buildtools
+      shell: bash
+    - name: Build plugin
+      shell: python
+      run:
+        from fog.buildtools import build
+        build(
+          src='${{ inputs.src }}',
+          output='build',
+          third_party_output='${{ inputs.third-party-target }}',
+          requirements='${{ inputs.requirements }}',
+        ) 
+    - name: Create zip archive
+      shell: bash
+      env:
+        ZIP_NAME: ${{ inputs.output-zip-name }}
+      run: |
+        7z a ${ZIP_NAME} ./src/*
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.output-zip-name }}
+        path: ${{ inputs.output-zip-name }}
