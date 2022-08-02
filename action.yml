@@ -28,7 +28,7 @@ runs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: '3.7.3'
+        python-version: '3.7.5'  # Version 3.7.3 used by GOG not avaialable https://github.com/actions/setup-python/issues/474
         architecture: ${{ matrix.arch }}
     - run: pip install fog.buildtools
       shell: bash
