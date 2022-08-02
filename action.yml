@@ -34,7 +34,7 @@ runs:
       shell: bash
     - name: Build plugin
       shell: python
-      run:
+      run: |
         from fog.buildtools import build
         build(
           src='${{ inputs.src }}',
