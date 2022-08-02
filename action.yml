@@ -6,16 +6,16 @@ inputs:
     description: 'Location of directory containing manifest.json and essential plugin files'
     required: true
     default: 'src'
+  build:
+    description: 'Relative path to expected build directory' 
+    required: true
+    default: 'build'
   requirements:
     description: 'Location of Python requirements file'
     required: true
     default: 'requirements/app.txt'
-  output-zip-name:
-    description: 'Name of created zip that contains build plugin'
-    required: true
-    default: 'build.zip'
   third-party-target:
-    description: 'Target directory where pip packages are dumped; relative to resulted build'
+    description: 'Target directory where pip packages are dumped; relative to `build`'
     required: false
     default: '.'
   python-arch:
@@ -38,18 +38,7 @@ runs:
         from fog.buildtools import build
         build(
           src='${{ inputs.src }}',
-          output='build',
+          output='${{ inputs.build }}',
           third_party_output='${{ inputs.third-party-target }}',
           requirements='${{ inputs.requirements }}',
         ) 
-    - name: Create zip archive
-      shell: bash
-      env:
-        ZIP_NAME: ${{ inputs.output-zip-name }}
-      run: |
-        7z a ${ZIP_NAME} ./src/*
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ${{ inputs.output-zip-name }}
-        path: ${{ inputs.output-zip-name }}
