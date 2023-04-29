@@ -6,16 +6,15 @@ inputs:
     description: 'Location of directory containing manifest.json and essential plugin files'
     required: true
     default: 'src'
-  build:
+  target:
     description: 'Relative path to expected build directory' 
     required: true
-    default: 'build'
   requirements:
     description: 'Location of Python requirements file'
     required: true
     default: 'requirements/app.txt'
   third-party-target:
-    description: 'Target directory where pip packages are dumped; relative to `build`'
+    description: 'Target directory where pip packages are dumped; relative to `target`'
     required: false
     default: '.'
 
@@ -38,7 +37,7 @@ runs:
         from fog.buildtools import build
         build(
           src='${{ inputs.src }}',
-          output='${{ inputs.build }}',
+          output='${{ inputs.target }}',
           third_party_output='${{ inputs.third-party-target }}',
           requirements='${{ inputs.requirements }}',
         ) 
