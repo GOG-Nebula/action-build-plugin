@@ -18,16 +18,14 @@ inputs:
     description: 'Target directory where pip packages are dumped; relative to `build`'
     required: false
     default: '.'
-  python-arch:
-    description: 'Python binary to be used: x64 for Mac or x86 for Windows'
-    required: true
 
 runs:
   using: "composite"
   steps:
-    - run: echo "Can't run on Linux!"; exit 1
-       if: ${{ runner.os == "Linux" }} 
-    - uses: actions/checkout@v3
+    - name: OS guard
+      run: echo "Only Windows (x86) and MacOS are supported!; exit 1
+      shell: bash
+      if: runner.os != 'windows' && runner.os != 'macOS'
     - uses: actions/setup-python@v4
       with:
         python-version: '3.7.3'  # bundled with GOG Galaxy
