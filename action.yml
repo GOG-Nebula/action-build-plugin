@@ -28,8 +28,8 @@ runs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: '3.7.5'  # Version 3.7.3 used by GOG not avaialable https://github.com/actions/setup-python/issues/474
-        architecture: ${{ inputs.python-arch }}
+        python-version: '3.7.3'  # bundled with GOG Galaxy
+        architecture: ${{ startsWith(runner.os, 'windows') && 'x86' || 'x64' }}
     - run: pip install fog.buildtools
       shell: bash
     - name: Build plugin
