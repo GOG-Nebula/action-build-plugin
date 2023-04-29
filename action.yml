@@ -25,6 +25,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - run: echo "Can't run on Linux!"; exit 1
+       if: ${{ runner.os == "Linux" }} 
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
