@@ -25,7 +25,7 @@ runs:
     - name: OS guard
       run: echo "Only Windows (x86) and MacOS are supported!; exit 1
       shell: bash
-      if: runner.os != 'windows' && runner.os != 'macOS'
+      if: ${{ runner.os != 'windows' && runner.os != 'macOS' }}
     - uses: actions/setup-python@v4
       with:
         python-version: '3.7.3'  # bundled with GOG Galaxy
